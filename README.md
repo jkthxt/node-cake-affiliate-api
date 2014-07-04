@@ -10,7 +10,7 @@ different APIs thus they provide big marketing platform. This module covers [Aff
 
 ## Installation
 
-    npm install cake-affiliate-api
+    npm install cake-affiliate-api --save
 
 ## Example
 
