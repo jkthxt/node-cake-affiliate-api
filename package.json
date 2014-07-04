@@ -1,0 +1,26 @@
+{
+  "name":         "cake-affiliate-api",
+  "description":  "Cake Affiliate API for Node.js",
+  "version":      "0.0.1",
+  "license":      "MIT",
+  "main":         "lib/index.js",
+  "keywords":     ["cake", "api", "affiliate", "advertisement", "marketing"],
+  "repository":   {
+    "type": "git",
+    "url":  "https://github.com/7eggs/node-cake-affiliate-api"
+  },
+  "bugs":         {
+    "url": "https://github.com/7eggs/node-cake-affiliate-api/issues"
+  },
+  "dependencies": {
+    "custom-error-generator": "^7.0.0",
+    "debug":                  "^1.0.2",
+    "lodash":                 "^2.4.1",
+    "request":                "^2.36.0",
+    "xml2js":                 "^0.4.4"
+  },
+  "scripts":      {
+    "postinstall": "cake build"
+  },
+  "author":       "Alexander Makarenko <estliberitas@gmail.com>"
+}
