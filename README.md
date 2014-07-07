@@ -106,6 +106,14 @@ Keep in mind that every API option which is passed in `camelcase` is `underscore
 
     * If `true` xml2js is not called for XML response and it's returned as string.
 
+* _parser_ defaults to `null`
+
+    * Should be a function like `parse(xmlString, callback)` where `callback` accepts `(err, response)`
+
+* _xml2jsOptions_ defaults to `{explicitArray: false}`
+
+    * Options passed to `xml2js.parseString()`. If specified will overwrite defaults. **Also if specified, client won't try to process response smartly (i.e. if response outputs collection it will return raw `xml2js` output instead of array).**
+
 ## FAQ
 
 **Why module is writted on CoffeeScript but compiled to JavaScript after `npm install`?**
@@ -120,5 +128,3 @@ Why should we do this if in the end all is compiled to JavaScript? :wink:
 ## TODO
 
 * Implement ALL APIs
-* Add options for custom XML parser
-* Add options for `xml2js`..?

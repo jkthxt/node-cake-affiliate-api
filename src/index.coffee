@@ -21,8 +21,34 @@ class CakeAffiliateAPI
       affiliateId: @affiliateId,
       apiKey:      @apiKey,
       baseUrl:     @baseUrl,
-      rawResponse: @rawResponse
+      rawResponse: @rawResponse,
+      parser:      @parser
     } = options
+
+    if not @parser
+      defaultOptions =
+        explicitArray: false
+
+      if not options.xml2jsOptions
+        @parserOptions = defaultOptions
+      else
+        @parserOptions = options.xml2jsOptions
+
+      self = @
+
+      @parser = (data, callback) ->
+        xml2js.parseString data, self.parserOptions, (err, result) ->
+          return callback new CakeAPIError 'Result parse error', -1, err if err
+
+          return callback null, result if self.parserOptions is not defaultOptions
+
+          response = self.getResponseObject result
+
+          if response instanceof Error
+            callback response
+          else
+            callback null, response
+
 
   underscoreQuery: (query) ->
     lodash.each query, (value, key) ->
@@ -116,25 +142,13 @@ class CakeAffiliateAPI
 
     debug('REQUEST ' + JSON.stringify(req))
     request req, (err, res, data) ->
-      if err
-        return callback new CakeAPIError 'Request error', -1, err
-      else if res.statusCode is not 200
-        return callback new CakeAPIError data, res.statusCode
+      return callback new CakeAPIError 'Request error', -1, err if err
 
-      if self.rawResponse
-        return callback null, result
+      return callback new CakeAPIError data, res.statusCode if res.statusCode is not 200
 
-      xml2js.parseString data, explicitArray: false, (err, result) ->
-        if err
-          return callback new CakeAPIError 'Result parse error', -1, err
+      return callback null, data if self.rawResponse
 
-        response = self.getResponseObject result
-
-        if response instanceof Error
-          callback response
-        else
-          callback null, response
-
+      self.parser data, callback
 
 module.exports = CakeAffiliateAPI
 
