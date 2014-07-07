@@ -3,11 +3,9 @@
 createCustomError = require 'custom-error-generator'
 debug             = (require 'debug') 'cake-affiliate-api'
 fs                = require 'fs'
-qs                = require 'querystring'
 request           = require 'request'
 lodash            = require 'lodash'
 path              = require 'path'
-util              = require 'utils'
 xml2js            = require 'xml2js'
 
 
@@ -31,6 +29,63 @@ class CakeAffiliateAPI
       newKey = key.replace /([A-Z])/g, ($1) -> '_' + $1.toLowerCase()
       query[newKey] = value
       delete query[key]
+
+  getResponseObject: (xmlDoc) ->
+    keys = Object.keys xmlDoc
+
+    responseKey = key for key in keys when ~key.indexOf('_response')
+
+    xmlDoc = xmlDoc[responseKey]
+
+    if not xmlDoc.success
+      # api_response:
+      #   success: false
+      #   message: 'Bad boy! :P'
+      new CakeAPIError xmlDoc.message, -1
+
+    # api_response:
+    #   success: true
+    #   row_count: 1
+    #   items:
+    #     result: [
+    #       itemA,
+    #       itemB
+    #     ]
+
+    keys = Object.keys xmlDoc
+    idx = keys.indexOf 'row_count'
+
+    if idx is -1 or idx + 1 is keys.length
+      xmlDoc
+
+    if xmlDoc.row_count is 0
+      []
+
+    listKey = keys[idx + 1]
+
+    # items:
+    #   result: [
+    #     itemA,
+    #     itemB
+    #   ]
+    xmlDoc = xmlDoc[listKey]
+
+    arrayKey = (Object.keys xmlDoc).shift()
+
+    # [
+    #   itemA,
+    #   itemB
+    # ]
+    #
+    # or just
+    #
+    # itemA
+    array = xmlDoc[arrayKey]
+
+    if Array.isArray array
+      array
+    else
+      [array]
 
   request: (method = 'GET', api, query = {}, callback) ->
     if arguments.length is 3 and typeof api is 'object'
@@ -73,7 +128,12 @@ class CakeAffiliateAPI
         if err
           return callback new CakeAPIError 'Result parse error', -1, err
 
-        callback null, result
+        response = self.getResponseObject result
+
+        if response instanceof Error
+          callback response
+        else
+          callback null, response
 
 
 module.exports = CakeAffiliateAPI
