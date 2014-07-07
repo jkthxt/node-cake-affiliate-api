@@ -7,4 +7,6 @@ module.exports = (campaignId, creativeId, contactId, cb) ->
     creativeId: creativeId
     contactId:  contactId
 
+  data.creativeId ?= 0
+
   @request '/affiliates/api/2/offers.asmx/SendCreativePack', data, cb
