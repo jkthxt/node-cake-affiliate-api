@@ -1,5 +1,5 @@
 CAKE Affiliate API for Node.js
-=======================
+==============================
 
 [CAKE](http://getcake.com) is _SaaS platform providing marketing intelligence for perforfmance marketers_ (LinkedIn). These guys have many 
 different APIs thus they provide big marketing platform. This module covers [Affiliate APIs](https://support.getcake.com/hc/en-us/sections/200129250-AFFILIATE-API-Documentation) group.
@@ -46,6 +46,25 @@ function handleResult(err, data) {
 
 Keep in mind that every API option which is passed in `camelcase` is `underscore`d before making HTTP call. So it's OK to name options like `mediaTypeCategoryId` (converted to `media_type_category_id`).
 
+### [addLinkCreative](https://support.getcake.com/hc/en-us/articles/200652944-cupCAKE-Commerce-Intelligence-Setup-and-Configuration-Affiliate-Publisher-)(campaignId, data, callback)
+
+`data` options:
+
+* **creativeName** (required)
+* **offerLink** (required)
+* `description` defaults to `null`
+
+### [applyForOffer](https://support.getcake.com/hc/en-us/articles/200706440--Offers-ApplyForOffer-V3-Affiliate)(offerContractId, data, callback)
+
+`data` options:
+
+* **mediaTypeId** (required)
+* `notes` defaults to `null`
+* **agreedToTerms** defaults to `false`
+* **agreedFromIpAddress** (required)
+
+### [creativeFeed](https://support.getcake.com/hc/en-us/articles/200652944-cupCAKE-Commerce-Intelligence-Setup-and-Configuration-Affiliate-Publisher-)(exportFeedId, updatesSince, callback)
+
 ### [getCampaign](https://support.getcake.com/hc/en-us/articles/200705940--Offers-GetCampaign-V2-Affiliate)(campaignId, callback)
 
 ### [getCreativeCode](https://support.getcake.com/hc/en-us/articles/200705950--Offers-GetCreativeCode-V2-Affiliate)(campaignId, creativeId, callback)
@@ -87,6 +106,14 @@ Keep in mind that every API option which is passed in `camelcase` is `underscore
 * `tagId` defaults to `0`
 * `startAtRow` defaults to `1`
 * `rowLimit` defaults to `0`
+
+### [sendCreativePack](https://support.getcake.com/hc/en-us/articles/200706460--Offers-SendCreativePack-V2-Affiliate)(campaignId, creativeId, contactId, callback)
+
+### [setPixel](https://support.getcake.com/hc/en-us/articles/200706040--Offers-SetPixel-V2-Affiliate)(campaignId, pixelHtml, callback)
+
+### [setPostbackURL](https://support.getcake.com/hc/en-us/articles/200706030--Offers-SetPostbackURL-V2-Affiliate)(campaignId, postbackURL, callback)
+
+### [setTestLink](https://support.getcake.com/hc/en-us/articles/200706020--Offers-SetTestLink-V2-Affiliate)(campaignId, testLink, callback)
 
 ## Options
 
